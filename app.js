@@ -3,15 +3,22 @@ let image = document.getElementById('kid-image'); // imagen Para ocultar
 let title = document.getElementById('title'); // h2 Para ocultar
 let paragraph = document.getElementById('paragraph'); // p Para ocultar
 let copyButton = document.getElementById('copy-btn'); // Boton para copiar
-let desencryptText = document.getElementById('text'); // Textarea donde el usuario ingrese texto
+const desencryptText = document.getElementById('text'); // Textarea donde el usuario ingrese texto
 let encryptText = document.getElementById('message'); // Textarea donde se regrese el texto encriptado
 
 
+const matrizCode = [
 // La letra "e" es convertida para "enter"
+  [],
 // La letra "i" es convertida para "imes"
+  [],
 // La letra "a" es convertida para "ai"
+  [],
 // La letra "o" es convertida para "ober"
+  [],
 // La letra "u" es convertida para "ufat"
+  []
+]
 
 // Funciones
 function validarTexto() {
