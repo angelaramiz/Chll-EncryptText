@@ -143,6 +143,12 @@ body {
 .desencrypt-btn:hover {
   background-color: var(--gray-100);
   transition: 0.6s;
+} 
+.desencrypt-btn:hover + .encrypt-btn {
+  background-color: var(--light-blue-20);
+  border: 1px solid var(--dark-blur-400);
+  color: var(--dark-blur-400);
+  transition: 0.6s;
 }
 
 .copy-btn {
@@ -158,6 +164,7 @@ body {
 .copy-btn:hover {
   background-color: var(--light-blue-100);
   transition: 0.6s;
+
 }
 
 /* aside */

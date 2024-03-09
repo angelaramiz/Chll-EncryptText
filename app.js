@@ -1,13 +1,11 @@
 // Variables
-let encryptButton = document.getElementById('encrypt-button'); // Boton para encriptar
-let desencryptButton = document.getElementById('desencrypt-button'); // Boton para desencriptar
-let copyButton = document.getElementById('copy-btn'); // Boton para copiar
-let desencryptText = document.getElementById('text'); // Textarea donde el usuario ingrese texto
-let encryptText = document.getElementById('message'); // Textarea donde se regrese el texto encriptado
 let image = document.getElementById('kid-image'); // imagen Para ocultar
 let title = document.getElementById('title'); // h2 Para ocultar
 let paragraph = document.getElementById('paragraph'); // p Para ocultar
-let caracteresProhibidos = /[A-ZàáèéìíòóùúÀÁÈÉÌÍÒÓÙÚ]/;
+let copyButton = document.getElementById('copy-btn'); // Boton para copiar
+let desencryptText = document.getElementById('text'); // Textarea donde el usuario ingrese texto
+let encryptText = document.getElementById('message'); // Textarea donde se regrese el texto encriptado
+
 
 // La letra "e" es convertida para "enter"
 // La letra "i" es convertida para "imes"
@@ -16,9 +14,8 @@ let caracteresProhibidos = /[A-ZàáèéìíòóùúÀÁÈÉÌÍÒÓÙÚ]/;
 // La letra "u" es convertida para "ufat"
 
 // Funciones
-function encriptarMensaje() {
-  let textoSinEncriptar = desencryptText.value;
-  if (caracteresProhibidos.test(textoSinEncriptar)) {
+function validarTexto() {
+  if (/[A-ZàáèéìíòóùúÀÁÈÉÌÍÒÓÙÚ]/.test(desencryptText.value)) {
     alert('Por favor, Solo letras minúsculas y sin acentos');
   } else if (desencryptText.value == '') {
     alert('Por favor, Indique un Texto para Encriptar');
@@ -101,6 +98,13 @@ function ocultarElementos() {
 function copiarTexto() {
   navigator.clipboard.writeText(encryptText.value);
   copyButton.textContent = '¡Copiado!';
+  setTimeout(() => {
+    encryptText.value = '';
+    encryptText.style.display = 'none';
+    paragraph.style.display = 'block';
+  }, 3000);
+ 
+
 }
 function limpiarCaja() {
   desencryptText.value = '';
