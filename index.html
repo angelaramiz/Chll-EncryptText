@@ -27,10 +27,10 @@
         <p>Solo letras minúsculas y sin acentos</p>
       </div>
       <div class="actions-buttons">
-        <button id="encrypt-button" onclick="validarTexto();" class="btn encrypt-btn">
+        <button id="encrypt-button" onclick="validarYProcesar('encrypt')" class="btn encrypt-btn">
           Encriptar
         </button>
-        <button id="desencrypt-button" onclick="desencriptarMensaje()" class="btn desencrypt-btn">
+        <button id="desencrypt-button" onclick="procesar('desencrypt')" class="btn desencrypt-btn">
           Desencriptar
         </button>
       </div>
@@ -38,8 +38,8 @@
     <aside class="aside">
       <div class="aside__container">
         <textarea id="message" class="encrypt-message" readonly></textarea>
-        <div class="kid-img">
-          <img id="kid-image" src="img/Muñeco.png" alt="" />
+        <div class="kid-image">
+          <img id="kid-img" src="img/Muñeco.png" alt="imagen ilustrativa" />
         </div>
         <div class="aside__text">
           <h2 id="title" class="aside__title">
@@ -65,5 +65,5 @@
   </div>
 </body>
 <script src="app.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

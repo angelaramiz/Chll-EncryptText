@@ -1,118 +1,122 @@
-// Variables
-let image = document.getElementById('kid-image'); // imagen Para ocultar
-let title = document.getElementById('title'); // h2 Para ocultar
-let paragraph = document.getElementById('paragraph'); // p Para ocultar
-let copyButton = document.getElementById('copy-btn'); // Boton para copiar
-const desencryptText = document.getElementById('text'); // Textarea donde el usuario ingrese texto
-let encryptText = document.getElementById('message'); // Textarea donde se regrese el texto encriptado
 
-
-const matrizCode = [
-// La letra "e" es convertida para "enter"
-  [],
-// La letra "i" es convertida para "imes"
-  [],
-// La letra "a" es convertida para "ai"
-  [],
-// La letra "o" es convertida para "ober"
-  [],
-// La letra "u" es convertida para "ufat"
-  []
-]
-
-// Funciones
 function validarTexto() {
-  if (/[A-ZàáèéìíòóùúÀÁÈÉÌÍÒÓÙÚ]/.test(desencryptText.value)) {
-    alert('Por favor, Solo letras minúsculas y sin acentos');
-  } else if (desencryptText.value == '') {
-    alert('Por favor, Indique un Texto para Encriptar');
-  } else {
-    ocultarElementos();
-    encryptText.value = encriptarTexto(enviarTexto());
-    limpiarCaja();
-    copyButton.textContent = 'Copiar';
-  }
-}
-function desencriptarMensaje() {
-  if (desencryptText.value == '') {
-    alert('Por favor, Indique un Texto para Desencriptar');
-  } else {
-    ocultarElementos();
-    encryptText.value = desencriptarTexto(enviarTexto());
-    limpiarCaja();
-    copyButton.textContent = 'Copiar';
-  }
-}
-function enviarTexto() {
-  return desencryptText.value.toLowerCase();
-}
-function encriptarTexto(mensaje) {
-  let texto = mensaje;
-  let resultado = '';
+  const texto = document.getElementById("text").value; // Cambiar "textoInput" por el ID del elemento textarea donde el usuario ingresa el texto
+  const regex = /[ÁÉÍÓÚáéíóúÜüA-Z]/; // Expresión regular para buscar mayúsculas o letras con acentos
 
-  for (var i = 0; i < texto.length; i++) {
-    if (texto[i] == 'a') {
-      resultado = resultado + 'ai';
-    } else if (texto[i] == 'e') {
-      resultado = resultado + 'enter';
-    } else if (texto[i] == 'i') {
-      resultado = resultado + 'imes';
-    } else if (texto[i] == 'o') {
-      resultado = resultado + 'ober';
-    } else if (texto[i] == 'u') {
-      resultado = resultado + 'ufat';
-    } else {
-      resultado = resultado + texto[i];
+  if (texto === "") {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Error',
+      text: 'Ingrese una palabra o cadena de texto.',
+    });
+    return false;
+  } else if (regex.test(texto)) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Error',
+      text: 'No se acepta texto con mayúsculas o acentos.',
+    });
+    return false;
+  }
+  return true;
+}
+
+function validarYProcesar(modo) {
+  if (modo === 'encrypt') {
+    if (!validarTexto()) {
+      return;
     }
   }
-
-  return resultado;
+  procesar(modo);
 }
-function desencriptarTexto(mensaje) {
-  let texto = mensaje;
-  let resultado = '';
 
-  for (var i = 0; i < texto.length; i++) {
-    if (texto[i] == 'a') {
-      resultado = resultado + 'a';
-      i = i + 1;
-    } else if (texto[i] == 'e') {
-      resultado = resultado + 'e';
-      i = i + 4;
-    } else if (texto[i] == 'i') {
-      resultado = resultado + 'i';
-      i = i + 3;
-    } else if (texto[i] == 'o') {
-      resultado = resultado + 'o';
-      i = i + 3;
-    } else if (texto[i] == 'u') {
-      resultado = resultado + 'u';
-      i = i + 3;
-    } else {
-      resultado = resultado + texto[i];
-    }
+function procesar(modo) {
+  const copyBtn = document.getElementById("copy-btn").style.display = "block";
+
+  const image = document.getElementById('kid-img'); // imagen Para ocultar
+  const title = document.getElementById('title'); // h2 Para ocultar
+  const paragraph = document.getElementById('paragraph'); // p Para ocultar
+  const resultado = document.getElementById("message"); // Textarea donde se regrese el texto encriptado
+  const codigosEncriptar = { a: 'ai', e: 'enter', i: 'imes', o: 'ober', u: 'ufat' };
+
+  const texto = document.getElementById("text").value; // 
+  const codigosDesencriptar = { ai: 'a', enter: 'e', imes: 'i', ober: 'o', ufat: 'u' };
+
+  let textoProcesado; // Variable para almacenar el texto procesado
+  if (modo === 'encrypt') {
+    textoProcesado = texto.replace(/[aeiou]/g, (letra) => codigosEncriptar[letra]);
+    resultado.value = textoProcesado;
+    resultado.style.display = "block";
+
+  } else if (modo === 'desencrypt') {
+    textoProcesado = texto.replace(/ai|enter|imes|ober|ufat/g, (codigo) => codigosDesencriptar[codigo]);
+    resultado.value = textoProcesado;
+    resultado.style.display = "block";
+
+
+  } else {
+    document.getElementById("copy-btn").textContent = "Copiar"; // Cambiar "copiar" por el ID del botón de copiar
+    document.getElementById("copy-btn").style.display = "none"; // Cambiar "copiar" por el ID del botón de copiar
+    Swal.fire({
+      icon: 'warning',
+      title: 'Error',
+      text: "Modo no válido. Por favor, usa 'encriptar' o 'desencriptar'.",
+    });
   }
-
-  return resultado;
-}
-function ocultarElementos() {
+  copyBtn.textContent = "Copiar"; // Cambiar "copiar" por el ID del botón de copiar
   image.style.display = 'none';
   title.style.display = 'none';
   paragraph.style.display = 'none';
-  copyButton.style.display = 'block';
-  encryptText.style.display = 'block';
+  // Vaciar el valor del input después de 1.5 segundos
+  setTimeout(function () {
+    document.getElementById("text").value = ""; // Cambiar "textoInput" por el ID del elemento textarea donde el usuario ingresa el texto
+  }, 1500);
 }
-function copiarTexto() {
-  navigator.clipboard.writeText(encryptText.value);
-  copyButton.textContent = '¡Copiado!';
-  setTimeout(() => {
-    encryptText.value = '';
-    encryptText.style.display = 'none';
-    paragraph.style.display = 'block';
-  }, 3000);
- 
 
-}
-function limpiarCaja() {
-  desencryptText.value = '';
+function copiarTexto() {
+  const textoResultado = document.getElementById("message").value; // Cambiar "resultado" por el ID del elemento textarea donde se muestra el resultado
+
+  Swal.fire({
+    title: '¿Desea copiar y pegar el texto en el input?',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'No',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById("text").value = textoResultado;
+      document.getElementById("message").value = "";
+      document.getElementById("copy-btn").style.display = "none";
+      setTimeout(()=> {
+        document.getElementById("kid-img").style.display = "block";
+        document.getElementById("title").style.display = "block";
+        document.getElementById("paragraph").style.display = "block";
+        document.getElementById("message").style.display = "none"; 
+      }, 1500);
+    } else if (!result.isConfirmed) {
+      navigator.clipboard.writeText(textoResultado)
+        .then(() => {
+          document.getElementById("copy-btn").textContent = "¡Copiado!";
+          Swal.fire({
+            icon: 'success',
+            title: '!Resultado copiado con exito¡',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+          setTimeout(function () {
+            document.getElementById("message").value = "";
+            document.getElementById("copy-btn").textContent = "Copiar";
+            document.getElementById("copy-btn").style.display = "none";
+            document.getElementById("kid-img").style.display = "block";
+            document.getElementById("title").style.display = "block";
+            document.getElementById("paragraph").style.display = "block";
+            document.getElementById("message").style.display = "none";  
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Error al copiar texto: ', err);
+        });
+    }
+  });
+
 }
