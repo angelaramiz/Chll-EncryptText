@@ -1,6 +1,6 @@
 
-function validarTexto() {
-  const texto = document.getElementById("text").value; // Cambiar "textoInput" por el ID del elemento textarea donde el usuario ingresa el texto
+function validarTexto() { // Funcion para validar el texto
+  const texto = document.getElementById("text").value; // Obtener el texto del campo de texto
   const regex = /[ÁÉÍÓÚáéíóúÜüA-Z]/; // Expresión regular para buscar mayúsculas o letras con acentos
 
   if (texto === "") {
@@ -8,6 +8,9 @@ function validarTexto() {
       icon: 'warning',
       title: 'Error',
       text: 'Ingrese una palabra o cadena de texto.',
+      timer: 2000,
+      showConfirmButton: false,
+      timerProgressBar: true,
     });
     return false;
   } else if (regex.test(texto)) {
@@ -15,22 +18,22 @@ function validarTexto() {
       icon: 'warning',
       title: 'Error',
       text: 'No se acepta texto con mayúsculas o acentos.',
+      timer: 2000,
+      showConfirmButton: false,
+      timerProgressBar: true,
     });
     return false;
   }
   return true;
 }
 
-function validarYProcesar(modo) {
-  if (modo === 'encrypt') {
-    if (!validarTexto()) {
-      return;
-    }
+function validarYProcesar(modo) { // Función para validar y procesar el texto
+  if (validarTexto()) {
+    procesar(modo); 
   }
-  procesar(modo);
 }
 
-function procesar(modo) {
+function procesar(modo) { // Función para procesar el texto
   const copyBtn = document.getElementById("copy-btn").style.display = "block";
 
   const image = document.getElementById('kid-img'); // imagen Para ocultar
@@ -63,18 +66,18 @@ function procesar(modo) {
       text: "Modo no válido. Por favor, usa 'encriptar' o 'desencriptar'.",
     });
   }
-  copyBtn.textContent = "Copiar"; // Cambiar "copiar" por el ID del botón de copiar
+  copyBtn.textContent = "Copiar"; 
   image.style.display = 'none';
   title.style.display = 'none';
   paragraph.style.display = 'none';
   // Vaciar el valor del input después de 1.5 segundos
   setTimeout(function () {
-    document.getElementById("text").value = ""; // Cambiar "textoInput" por el ID del elemento textarea donde el usuario ingresa el texto
+    document.getElementById("text").value = ""; 
   }, 1500);
 }
 
-function copiarTexto() {
-  const textoResultado = document.getElementById("message").value; // Cambiar "resultado" por el ID del elemento textarea donde se muestra el resultado
+function copiarTexto() { // Función para copiar el texto encriptado
+  const textoResultado = document.getElementById("message").value; 
 
   Swal.fire({
     title: '¿Desea copiar y pegar el texto en el input?',
