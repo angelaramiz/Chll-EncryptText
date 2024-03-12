@@ -1,3 +1,4 @@
+let historial = []; // Variable global para almacenar el historial
 
 function validarTexto() { // Funcion para validar el texto
   const texto = document.getElementById("text").value; // Obtener el texto del campo de texto
@@ -58,14 +59,17 @@ function procesar(modo) { // Función para procesar el texto
 
 
   } else {
-    document.getElementById("copy-btn").textContent = "Copiar"; // Cambiar "copiar" por el ID del botón de copiar
-    document.getElementById("copy-btn").style.display = "none"; // Cambiar "copiar" por el ID del botón de copiar
+    document.getElementById("copy-btn").textContent = "Copiar"; 
+    document.getElementById("copy-btn").style.display = "none"; 
     Swal.fire({
       icon: 'warning',
       title: 'Error',
       text: "Modo no válido. Por favor, usa 'encriptar' o 'desencriptar'.",
     });
   }
+  const fechaActual = new Date().toLocaleString(); // Obtener la fecha actual
+  historial.push({ modo: modo, texto: textoProcesado, fecha: fechaActual, textoOriginal: texto  }); // Agregar entrada al historial
+
   copyBtn.textContent = "Copiar"; 
   image.style.display = 'none';
   title.style.display = 'none';
@@ -114,7 +118,7 @@ function copiarTexto() { // Función para copiar el texto encriptado
             document.getElementById("title").style.display = "block";
             document.getElementById("paragraph").style.display = "block";
             document.getElementById("message").style.display = "none";  
-          }, 2000);
+          }, 1500);
         })
         .catch(err => {
           console.error('Error al copiar texto: ', err);
@@ -122,4 +126,45 @@ function copiarTexto() { // Función para copiar el texto encriptado
     }
   });
 
+}
+
+function mostrarHistorial() { // Función para mostrar el historial
+  if (historial.length === 0) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Historial Vacío',
+      text: 'No hay registros en el historial.',
+      timer: 1500,
+      showConfirmButton: false,
+      timerProgressBar: true,
+    });
+    return;
+  }
+
+  let historialHTML = '<div style="max-height: 300px; overflow-y: auto;">'; // Contenedor para el historial
+  let resultadoMasReciente = historial[0]; // Variable para almacenar el resultado más reciente
+  let resultadoMasAntiguo = historial[historial.length - 1]; // Variable para almacenar el resultado más antiguo
+  
+  historial.forEach((item) => {
+    let color = item.modo === 'encrypt' ? 'green' : 'blue'; // Color diferente para cada opción
+    historialHTML += `<p style="color: ${color}; margin-bottom: 5px;"> ${item.textoOriginal} => ${item.texto}</p>`;
+    historialHTML += `<p style="font-size: 12px; color: gray; margin-bottom: 10px;">Procesado el ${item.fecha}</p>`;
+    if (new Date(item.fecha) > new Date(resultadoMasReciente.fecha)){
+      resultadoMasReciente = item;
+    }
+    if (new Date(item.fecha) < new Date(resultadoMasAntiguo.fecha)){
+      resultadoMasAntiguo = item;
+    }
+  });
+  historialHTML += `<p>Resultado más reciente: ${resultadoMasReciente.textoOriginal}</p>`;
+  historialHTML += `<p>Resultado más antiguo: ${resultadoMasAntiguo.textoOriginal}</p`
+
+  historialHTML += '</div>';
+
+  Swal.fire({
+    title: 'Historial Reciente',
+    html: historialHTML,
+    showCloseButton: true,
+    showConfirmButton: false,
+  });
 }
