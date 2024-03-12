@@ -175,6 +175,7 @@ body {
   border: none;
   color: var(--light-blue-200);
 }
+
 .history-btn:hover{
   background-color: var(--light-blue-100);
   color: var(--dark-blur-400);
@@ -332,7 +333,7 @@ footer p {
   }
 
   .btn {
-    /* margin-top: 10px; */
+    margin-top: 10px;
     width: 260px;
     height: 55px;
   }
